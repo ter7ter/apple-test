@@ -63,15 +63,15 @@ class Apple extends \yii\db\ActiveRecord
     }
 
     public function eat(int $amount) {
-        if (is_null($this->date_fall)) {
-            throw new \Exception('Яблоко ещё не упало');
+        if (!$this->isFallen()) {
+            throw new \Exception('Cъесть нельзя, яблоко ещё не упало');
         }
         if ($this->isRotten()) {
-            throw new \Exception('Яблоко сгнило');
+            throw new \Exception('Cъесть нельзя, яблоко сгнило');
         }
         $decSize = $amount / 100;
         if ($this->size < $decSize) {
-            throw new \Exception('Недостаточно яблока');
+            throw new \Exception('Нельзя съесть больше чем есть яблока');
         }
         $this->size -= $decSize;
         if ($this->size == 0) {
@@ -82,21 +82,32 @@ class Apple extends \yii\db\ActiveRecord
     }
 
     public function fallToGround() {
-        $this->fallen = 1;
-        $this->date_fall = date('Y-m-d H:i:s');
+        if ($this->isFallen()) {
+            throw new \Exception('Яблоко уже упало');
+        } else {
+            $this->date_fall = date('Y-m-d H:i:s');
+        }
     }
 
     public function isRotten() {
-        if ($this->fallen && time() - strtotime($this->date_fall) > Yii::$app->params['appleRotTime']) {
+        if ($this->isFallen() && time() - strtotime($this->date_fall) > Yii::$app->params['appleRotTime']) {
             return true;
         } else {
             return false;
         }
     }
 
+    public function isFallen() {
+        if (is_null($this->date_fall)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     public function status() {
         if (!$this->date_fall) {
-            return 'Не упало';
+            return 'На дереве';
         } elseif ($this->isRotten()) {
             return 'Сгнило';
         } else {
