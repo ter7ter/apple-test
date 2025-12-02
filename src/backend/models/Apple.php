@@ -58,4 +58,36 @@ class Apple extends \yii\db\ActiveRecord
         ];
     }
 
+    public function eat(int $amount) {
+        if (!$this->fallen) {
+            throw new \Exception('Яблоко ещё не упало');
+        }
+        if ($this->isRotten()) {
+            throw new \Exception('Яблоко сгнило');
+        }
+        $decSize = $amount / 100;
+        if ($this->size < $decSize) {
+            throw new \Exception('Недостаточно яблока');
+        }
+        $this->size -= $decSize;
+        if ($this->size == 0) {
+            $this->delete();
+        } else {
+            $this->save();
+        }
+    }
+
+    public function fallToGround() {
+        $this->fallen = 1;
+        $this->date_fall = time();
+    }
+
+    public function isRotten() {
+        if ($this->fallen && time() - $this->date_fall > 5 * 24 * 60 * 60) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }
