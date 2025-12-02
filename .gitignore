@@ -1,0 +1,38 @@
+# Docker
+.env
+docker-compose.override.yml # For local overrides, if any
+
+# Build artifacts
+*.log
+*.sql
+*.sqlite
+*.sqlite-journal
+
+# Composer
+/src/vendor/
+/src/composer.lock # Keep this if you want consistent builds, but often ignored in dev
+
+# Yii2 specific
+/src/runtime/
+/src/web/assets/
+/src/frontend/web/assets/
+/src/backend/web/assets/
+/src/console/runtime/
+/src/frontend/runtime/
+/src/backend/runtime/
+
+# Local configuration files (should not be committed)
+/src/common/config/main-local.php
+/src/common/config/params-local.php
+/src/frontend/config/main-local.php
+/src/frontend/config/params-local.php
+/src/backend/config/main-local.php
+/src/backend/config/params-local.php
+/src/console/config/main-local.php
+/src/console/config/params-local.php
+
+# IDE and OS specific files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
