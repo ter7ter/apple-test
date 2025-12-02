@@ -88,7 +88,7 @@ class AppleController extends Controller
         } catch (\Exception $e) {
             Yii::$app->session->setFlash('error', $e->getMessage());
         }
-        return $this->redirect(['index']);
+        return $this->redirect(Yii::$app->request->referrer ?: ['index']);
     }
 
     /**
@@ -111,7 +111,7 @@ class AppleController extends Controller
                 Yii::$app->session->setFlash('error', $e->getMessage());
             }
         }
-        return $this->redirect(['index']);
+        return $this->redirect(Yii::$app->request->referrer ?: ['index']);
     }
 
     /**
