@@ -43,6 +43,14 @@ class Apple extends \yii\db\ActiveRecord
         ];
     }
 
+    const COLORS = ['red', 'green', 'yellow'];
+
+    public function __construct() {
+        parent::__construct();
+        $this->date_create = date('Y-m-d H:i:s', time() - rand(0, Yii::$app->params['appleGenerateMaxTime']));
+        $this->color = self::COLORS[array_rand(self::COLORS)];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -79,11 +87,11 @@ class Apple extends \yii\db\ActiveRecord
 
     public function fallToGround() {
         $this->fallen = 1;
-        $this->date_fall = time();
+        $this->date_fall = date('Y-m-d H:i:s');
     }
 
     public function isRotten() {
-        if ($this->fallen && time() - $this->date_fall > 5 * 24 * 60 * 60) {
+        if ($this->fallen && time() - strtotime($this->date_fall) > Yii::$app->params['appleRotTime']) {
             return true;
         } else {
             return false;

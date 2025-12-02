@@ -3,7 +3,7 @@
 namespace backend\controllers;
 
 use backend\models\Apple;
-use backend\models\AppleSearch;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -38,13 +38,28 @@ class AppleController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new AppleSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider = new ActiveDataProvider([
+            'query' => Apple::find(),
+        ]);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    /**
+     * Generates random apples.
+     *
+     * @return \yii\web\Response
+     */
+    public function actionGenerate()
+    {
+        $count = rand(1, Yii::$app->params['appleGenerateMaxCount']);
+        for ($i = 0; $i < $count; $i++) {
+            $apple = new Apple();
+            $apple->save();
+        }
+        return $this->redirect(['index']);
     }
 
     /**
