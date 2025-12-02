@@ -8,6 +8,7 @@ $params = array_merge(
 
 return [
     'id' => 'app-backend',
+    'name' => 'Яблоки',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'homeUrl' => ['apple/index'],
