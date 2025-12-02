@@ -11,7 +11,6 @@ use Yii;
  * @property string $color
  * @property string $date_create
  * @property string|null $date_fall
- * @property int $fallen
  * @property float $size
  */
 class Apple extends \yii\db\ActiveRecord
@@ -33,11 +32,9 @@ class Apple extends \yii\db\ActiveRecord
     {
         return [
             [['date_fall'], 'default', 'value' => null],
-            [['fallen'], 'default', 'value' => 0],
             [['size'], 'default', 'value' => 1],
             [['color', 'date_create'], 'required'],
             [['date_create', 'date_fall'], 'safe'],
-            [['fallen'], 'integer'],
             [['size'], 'number'],
             [['color'], 'string', 'max' => 255],
         ];
@@ -58,16 +55,15 @@ class Apple extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'color' => 'Color',
-            'date_create' => 'Date Create',
-            'date_fall' => 'Date Fall',
-            'fallen' => 'Fallen',
-            'size' => 'Size',
+            'color' => 'Цвет',
+            'date_create' => 'Дата появления',
+            'date_fall' => 'Дата падения',
+            'size' => 'Осталось яблока',
         ];
     }
 
     public function eat(int $amount) {
-        if (!$this->fallen) {
+        if (is_null($this->date_fall)) {
             throw new \Exception('Яблоко ещё не упало');
         }
         if ($this->isRotten()) {
@@ -95,6 +91,16 @@ class Apple extends \yii\db\ActiveRecord
             return true;
         } else {
             return false;
+        }
+    }
+
+    public function status() {
+        if (!$this->date_fall) {
+            return 'Не упало';
+        } elseif ($this->isRotten()) {
+            return 'Сгнило';
+        } else {
+            return 'Упало';
         }
     }
 

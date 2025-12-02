@@ -31,10 +31,31 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'color',
-            'date_create',
-            'date_fall',
-            'fallen',
-            'size',
+            [
+                'attribute' => 'status',
+                'label' => 'Статус',
+                'value' => function($model) {
+                    return $model->status();
+                }
+            ],
+            'attribute' => 'date_create',
+            [
+                'attribute' => 'date_fall',
+                'value' => function($model) {
+                    if ($model->date_fall) {
+                        return date('Y-m-d H:i:s', $this->date_fall);
+                    } else {
+                        return 'Не упало';
+                    }
+                }
+            ],
+            [
+                'attribute' => 'size',
+                'value' => function ($model) {
+                    return $model->size * 100 . ' %';
+
+                }
+            ],
         ],
     ]) ?>
 

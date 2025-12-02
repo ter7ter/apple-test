@@ -17,7 +17,6 @@ class m251202_130710_create_apple_table extends Migration
             'color' => $this->string()->notNull(),
             'date_create' => $this->timestamp()->notNull(),
             'date_fall' => $this->timestamp()->null(),
-            'fallen' => $this->boolean()->notNull()->defaultValue(false),
             'size' => $this->double()->notNull()->defaultValue(1),
         ]);
     }
